@@ -523,7 +523,7 @@ class MuxingSession extends EventEmitter {
       hasVideo: this.hasVideo,
       probe: this.probe,
 
-      segmentListSize: VIDEO_LIVE.SEGMENTS_LIST_SIZE,
+      segmentListSize: CONFIG.LIVE.HLS.SEGMENTS_LIST_SIZE,
       segmentDuration: getLiveSegmentTime(this.videoLive.latencyMode),
 
       outDirectory: this.outDirectory
