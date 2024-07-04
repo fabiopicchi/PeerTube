@@ -134,26 +134,8 @@ export class HLSOptionsBuilder {
   }
 
   private getP2PMediaLoaderLiveOptions (): Partial<HybridLoaderSettings> {
-    const base = {
-      requiredSegmentsPriority: 1
-    }
-
-    const latencyMode = this.options.liveOptions.latencyMode
-
-    switch (latencyMode) {
-      case LiveVideoLatencyMode.SMALL_LATENCY:
-        return {
-          ...base,
-
-          useP2P: false,
-          requiredSegmentsPriority: 10
-        }
-
-      case LiveVideoLatencyMode.HIGH_LATENCY:
-        return base
-
-      default:
-        return base
+    return {
+      useP2P: false
     }
   }
 

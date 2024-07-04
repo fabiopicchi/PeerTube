@@ -634,6 +634,11 @@ live:
   # High latency live streams can increase P2P ratio
   latency_setting:
     enabled: true
+  
+  hls:
+    # How many segments should be kept in an HLS playlist. Set to 0 to keep all of them
+    # allowing the user to rewind the live all the way to the beginning
+    segments_list_size: 0
 
   # Your firewall should accept traffic from this port in TCP if you enable live
   rtmp:

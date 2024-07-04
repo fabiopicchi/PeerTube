@@ -102,8 +102,8 @@ export class PeerTubePlayer {
 
     this.loadDynamicPlugins()
 
-    if (this.options.controlBar === false) this.player.controlBar.hide()
-    else this.player.controlBar.show()
+    // if (this.options.controlBar === false) this.player.controlBar.hide()
+    // else this.player.controlBar.show()
 
     this.player.autoplay(this.getAutoPlayValue(this.currentLoadOptions.autoplay))
 
@@ -428,6 +428,8 @@ export class PeerTubePlayer {
       poster: this.currentLoadOptions.poster,
       inactivityTimeout: this.options.inactivityTimeout,
       playbackRates: [ 0.5, 0.75, 1, 1.25, 1.5, 1.75, 2 ],
+
+      liveui: true,
 
       plugins,
 

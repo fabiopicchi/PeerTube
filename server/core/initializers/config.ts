@@ -463,6 +463,10 @@ const CONFIG = {
       get ENABLED () { return config.get<boolean>('live.latency_setting.enabled') }
     },
 
+    HLS: {
+      get SEGMENTS_LIST_SIZE () { return config.get<number>('live.hls.segments_list_size') },
+    },
+
     RTMP: {
       get ENABLED () { return config.get<boolean>('live.rtmp.enabled') },
       get PORT () { return config.get<number>('live.rtmp.port') },

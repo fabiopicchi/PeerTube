@@ -220,9 +220,7 @@ class PeerTubePlugin extends Plugin {
 
   private initializePlayer () {
     if (isMobile()) this.player.addClass('vjs-is-mobile')
-
-    this.initSmoothProgressBar()
-
+    
     this.player.ready(() => {
       this.listenControlBarMouse()
     })
@@ -496,10 +494,10 @@ class PeerTubePlugin extends Plugin {
   private updateControlBar () {
     debugLogger('Updating control bar')
 
+    this.player.controlBar.getChild('progressControl').show()
     if (this.options.isLive()) {
       this.getPlaybackRateButton().hide()
 
-      this.player.controlBar.getChild('progressControl').hide()
       this.player.controlBar.getChild('currentTimeDisplay').hide()
       this.player.controlBar.getChild('timeDivider').hide()
       this.player.controlBar.getChild('durationDisplay').hide()
@@ -508,7 +506,6 @@ class PeerTubePlugin extends Plugin {
     } else {
       this.getPlaybackRateButton().show()
 
-      this.player.controlBar.getChild('progressControl').show()
       this.player.controlBar.getChild('currentTimeDisplay').show()
       this.player.controlBar.getChild('timeDivider').show()
       this.player.controlBar.getChild('durationDisplay').show()
@@ -561,28 +558,6 @@ class PeerTubePlugin extends Plugin {
         this.player.on('timeupdate', this.stopTimeHandler)
       }
     })
-  }
-
-  // Thanks: https://github.com/videojs/video.js/issues/4460#issuecomment-312861657
-  private initSmoothProgressBar () {
-    const SeekBar = videojs.getComponent('SeekBar') as any
-    SeekBar.prototype.getPercent = function getPercent () {
-      // Allows for smooth scrubbing, when player can't keep up.
-      // const time = (this.player_.scrubbing()) ?
-      //   this.player_.getCache().currentTime :
-      //   this.player_.currentTime()
-      const time = this.player_.currentTime()
-      const percent = time / this.player_.duration()
-      return percent >= 1 ? 1 : percent
-    }
-    SeekBar.prototype.handleMouseMove = function handleMouseMove (event: any) {
-      let newTime = this.calculateDistance(event) * this.player_.duration()
-      if (newTime === this.player_.duration()) {
-        newTime = newTime - 0.1
-      }
-      this.player_.currentTime(newTime)
-      this.update()
-    }
   }
 
   private getCaptionsButton () {
