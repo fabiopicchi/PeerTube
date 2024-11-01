@@ -24,7 +24,7 @@ if [ -z "$GITHUB_TOKEN" ]; then
   exit -1
 fi
 
-maintainer_public_key=${MAINTAINER_GPG:-"583A612D890159BE"}
+maintainer_public_key=${MAINTAINER_GPG:-"6AA5F210129E811E"}
 
 peertube_directory=$(basename $(pwd))
 
@@ -48,7 +48,7 @@ directory_name="peertube-$version"
 zip_name="peertube-$version.zip"
 tar_name="peertube-$version.tar.xz"
 
-changelog=$(awk -v version="$version" '/## v/ { printit = $2 == version }; printit;' CHANGELOG.md | grep -v "## $version" | sed '1{/^$/d}')
+changelog="Add DVR support"
 
 printf "Changelog will be:\\n\\n%s\\n\\n" "$changelog"
 
@@ -116,34 +116,19 @@ find dist/ packages/core-utils/dist/ \
   git push origin --tag
 
   if [ -z "$github_prerelease_option" ]; then
-    github-release release --user chocobozzz --repo peertube --tag "$version" --name "$version" --description "$changelog"
+    github-release release --user fabiopicchi --repo peertube --tag "$version" --name "$version" --description "$changelog"
   else
-    github-release release --user chocobozzz --repo peertube --tag "$version" --name "$version" --description "$changelog" "$github_prerelease_option"
+    github-release release --user fabiopicchi --repo peertube --tag "$version" --name "$version" --description "$changelog" "$github_prerelease_option"
   fi
 
   # Wait for the release to be published, we had some issues when the files were not uploaded because of "unknown release" error
   sleep 2
 
-  github-release upload --user chocobozzz --repo peertube --tag "$version" --name "$zip_name" --file "$zip_name"
-  github-release upload --user chocobozzz --repo peertube --tag "$version" --name "$zip_name.asc" --file "$zip_name.asc"
-  github-release upload --user chocobozzz --repo peertube --tag "$version" --name "$tar_name" --file "$tar_name"
-  github-release upload --user chocobozzz --repo peertube --tag "$version" --name "$tar_name.asc" --file "$tar_name.asc"
+  github-release upload --user fabiopicchi --repo peertube --tag "$version" --name "$zip_name" --file "$zip_name"
+  github-release upload --user fabiopicchi --repo peertube --tag "$version" --name "$zip_name.asc" --file "$zip_name.asc"
+  github-release upload --user fabiopicchi --repo peertube --tag "$version" --name "$tar_name.asc" --file "$tar_name.asc"
+  github-release upload --user fabiopicchi --repo peertube --tag "$version" --name "$tar_name" --file "$tar_name"
 
   git push origin "$branch"
 
-  # Only update master if it is not a pre release
-  if [ -z "$github_prerelease_option" ]; then
-      # Update master branch
-      git checkout master
-      git merge "$branch"
-      git push origin master
-      git checkout "$branch"
-
-      # Rebuild properly the server, with the declaration files
-      npm run build:server
-      # Release types package
-      npm run generate-types-package "$version"
-      cd packages/types-generator/dist
-      npm publish --access public
-  fi
 )
